@@ -16,6 +16,7 @@ final class MemeCreateViewController: UIViewController,UIImagePickerControllerDe
     @IBOutlet weak private var topToolbar: UIToolbar!
     @IBOutlet weak private var bottomToolbar: UIToolbar!
     private var keyboardAlreadyShow = false
+    private var memeList: [Meme] = []
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -95,6 +96,11 @@ final class MemeCreateViewController: UIViewController,UIImagePickerControllerDe
         return memedImage
     }
 
+    private func save() {
+        let meme = Meme(top: topTextField.text, bottom: topTextField.text, originalImage: photoImageView.image, memeImage: generateMemedImage())
+        memeList.append(meme)
+    }
+
     // MARK: Actions
     @IBAction private func pickButtonPressed(_ sender: Any) {
         let pickerController = UIImagePickerController()
@@ -112,6 +118,12 @@ final class MemeCreateViewController: UIViewController,UIImagePickerControllerDe
     @IBAction private func shareButtonPressed(_ sender: Any) {
         let shareImage = generateMemedImage()
         let activityVC = UIActivityViewController(activityItems: [shareImage], applicationActivities: nil)
+        activityVC.completionWithItemsHandler = {(activityType: UIActivity.ActivityType?, completed: Bool, returnedItems: [Any]?, error: Error?) in
+            if completed {
+                self.save()
+                return
+            }
+        }
         present(activityVC, animated: true, completion: nil)
     }
 
