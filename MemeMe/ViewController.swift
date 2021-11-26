@@ -13,7 +13,9 @@ final class ViewController: UIViewController,UIImagePickerControllerDelegate, UI
     @IBOutlet weak var bottomTextField: UITextField!
     @IBOutlet weak private var photoImageView: UIImageView!
     @IBOutlet weak var cameraButton: UIBarButtonItem!
-
+    @IBOutlet weak var topToolbar: UIToolbar!
+    @IBOutlet weak var bottomToolbar: UIToolbar!
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         prepareTextFields()
@@ -34,13 +36,15 @@ final class ViewController: UIViewController,UIImagePickerControllerDelegate, UI
         topTextField.delegate = self
         bottomTextField.delegate = self
         let memeTextAttributes: [NSAttributedString.Key: Any] = [
-            NSAttributedString.Key.strokeColor: UIColor.black,
-            NSAttributedString.Key.foregroundColor: UIColor.white,
-            NSAttributedString.Key.font: UIFont(name: "HelveticaNeue-CondensedBlack", size: 40)!,
-            NSAttributedString.Key.strokeWidth: 2.0
+            .strokeColor: UIColor.black,
+            .foregroundColor: UIColor.white,
+            .font: UIFont(name: "HelveticaNeue-CondensedBlack", size: 40)!,
+            .strokeWidth: -2.0
         ]
         topTextField.defaultTextAttributes = memeTextAttributes
         bottomTextField.defaultTextAttributes = memeTextAttributes
+        topTextField.textAlignment = .center
+        bottomTextField.textAlignment = .center
     }
 
     private func subscribeToKeyboardNotifications() {
@@ -66,6 +70,22 @@ final class ViewController: UIViewController,UIImagePickerControllerDelegate, UI
         return keyboardSize.cgRectValue.height
     }
 
+    func save() {
+        // Create the meme
+        let meme = Meme(top: topTextField.text!, bottom: bottomTextField.text!, originalImage: photoImageView.image!, memeImage: generateMemedImage())
+    }
+
+    func generateMemedImage() -> UIImage {
+
+        // Render view to an image
+        UIGraphicsBeginImageContext(self.view.frame.size)
+        view.drawHierarchy(in: self.view.frame, afterScreenUpdates: true)
+        let memedImage:UIImage = UIGraphicsGetImageFromCurrentImageContext()!
+        UIGraphicsEndImageContext()
+
+        return memedImage
+    }
+
     @IBAction private func pickButtonPressed(_ sender: Any) {
         let pickerController = UIImagePickerController()
         pickerController.delegate = self
@@ -79,6 +99,12 @@ final class ViewController: UIViewController,UIImagePickerControllerDelegate, UI
         present(pickerController, animated: true, completion: nil)
     }
 
+    @IBAction func shareButtonPressed(_ sender: Any) {
+        let shareImage = generateMemedImage()
+        let activityVC = UIActivityViewController(activityItems: [shareImage], applicationActivities: nil)
+        present(activityVC, animated: true, completion: nil)
+    }
+    
     func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey : Any]) {
         if let image = info[.originalImage] as? UIImage {
             photoImageView.image = image
@@ -91,7 +117,8 @@ final class ViewController: UIViewController,UIImagePickerControllerDelegate, UI
     }
 
     func textFieldShouldReturn(_ textField: UITextField) -> Bool {
-        true
+        textField.resignFirstResponder()
+        return true
     }
 
     func textFieldDidBeginEditing(_ textField: UITextField) {
