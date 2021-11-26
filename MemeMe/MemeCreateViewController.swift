@@ -15,6 +15,7 @@ final class MemeCreateViewController: UIViewController,UIImagePickerControllerDe
     @IBOutlet weak private var cameraButton: UIBarButtonItem!
     @IBOutlet weak private var topToolbar: UIToolbar!
     @IBOutlet weak private var bottomToolbar: UIToolbar!
+    private var keyboardAlreadyShow = false
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -52,10 +53,21 @@ final class MemeCreateViewController: UIViewController,UIImagePickerControllerDe
     }
 
     @objc func keyboardWillShow(_ notification: Notification) {
-        view.frame.origin.y -= getKeyboardHeight(notification)
+        if bottomTextField.isFirstResponder && keyboardAlreadyShow == false {
+            UIView.animate(withDuration: 0.5) {
+                self.view.frame.origin.y -= self.getKeyboardHeight(notification)
+                self.keyboardAlreadyShow = true
+            }
+        }
     }
+
     @objc func keyboardWillHide(_ notification: Notification) {
-        view.frame.origin.y = 0
+        if bottomTextField.isFirstResponder {
+            UIView.animate(withDuration: 0.5) {
+                self.view.frame.origin.y = 0
+                self.keyboardAlreadyShow = false
+            }
+        }
     }
 
     // Calculates keyboard height
@@ -68,11 +80,17 @@ final class MemeCreateViewController: UIViewController,UIImagePickerControllerDe
     // Generates meme image
     private func generateMemedImage() -> UIImage {
 
+        topToolbar.isHidden = true
+        bottomToolbar.isHidden = true
+
         // Render view to an image
         UIGraphicsBeginImageContext(self.view.frame.size)
         view.drawHierarchy(in: self.view.frame, afterScreenUpdates: true)
         let memedImage:UIImage = UIGraphicsGetImageFromCurrentImageContext()!
         UIGraphicsEndImageContext()
+
+        topToolbar.isHidden = false
+        bottomToolbar.isHidden = false
 
         return memedImage
     }
