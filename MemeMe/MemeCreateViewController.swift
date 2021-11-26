@@ -1,5 +1,5 @@
 //
-//  ViewController.swift
+//  MemeCreateViewController.swift
 //  MemeMe
 //
 //  Created by KAAN YILDIRIM on 24.11.2021.
@@ -7,14 +7,14 @@
 
 import UIKit
 
-final class ViewController: UIViewController,UIImagePickerControllerDelegate, UINavigationControllerDelegate, UITextFieldDelegate {
+final class MemeCreateViewController: UIViewController,UIImagePickerControllerDelegate, UINavigationControllerDelegate, UITextFieldDelegate {
 
-    @IBOutlet weak var topTextField: UITextField!
-    @IBOutlet weak var bottomTextField: UITextField!
+    @IBOutlet weak private var topTextField: UITextField!
+    @IBOutlet weak private var bottomTextField: UITextField!
     @IBOutlet weak private var photoImageView: UIImageView!
-    @IBOutlet weak var cameraButton: UIBarButtonItem!
-    @IBOutlet weak var topToolbar: UIToolbar!
-    @IBOutlet weak var bottomToolbar: UIToolbar!
+    @IBOutlet weak private var cameraButton: UIBarButtonItem!
+    @IBOutlet weak private var topToolbar: UIToolbar!
+    @IBOutlet weak private var bottomToolbar: UIToolbar!
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -32,8 +32,6 @@ final class ViewController: UIViewController,UIImagePickerControllerDelegate, UI
     }
 
     private func prepareTextFields() {
-        topTextField.delegate = self
-        bottomTextField.delegate = self
         let memeTextAttributes: [NSAttributedString.Key: Any] = [
             .strokeColor: UIColor.black,
             .foregroundColor: UIColor.white,
@@ -44,6 +42,8 @@ final class ViewController: UIViewController,UIImagePickerControllerDelegate, UI
         bottomTextField.defaultTextAttributes = memeTextAttributes
         topTextField.textAlignment = .center
         bottomTextField.textAlignment = .center
+        topTextField.delegate = self
+        bottomTextField.delegate = self
     }
 
     private func subscribeToKeyboardNotifications() {
@@ -64,12 +64,7 @@ final class ViewController: UIViewController,UIImagePickerControllerDelegate, UI
         return keyboardSize.cgRectValue.height
     }
 
-    func save() {
-        // Create the meme
-        let meme = Meme(top: topTextField.text!, bottom: bottomTextField.text!, originalImage: photoImageView.image!, memeImage: generateMemedImage())
-    }
-
-    func generateMemedImage() -> UIImage {
+    private func generateMemedImage() -> UIImage {
 
         // Render view to an image
         UIGraphicsBeginImageContext(self.view.frame.size)
@@ -93,7 +88,7 @@ final class ViewController: UIViewController,UIImagePickerControllerDelegate, UI
         present(pickerController, animated: true, completion: nil)
     }
 
-    @IBAction func shareButtonPressed(_ sender: Any) {
+    @IBAction private func shareButtonPressed(_ sender: Any) {
         let shareImage = generateMemedImage()
         let activityVC = UIActivityViewController(activityItems: [shareImage], applicationActivities: nil)
         present(activityVC, animated: true, completion: nil)
