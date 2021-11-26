@@ -81,8 +81,7 @@ final class MemeCreateViewController: UIViewController,UIImagePickerControllerDe
     // Generates meme image
     private func generateMemedImage() -> UIImage {
 
-        topToolbar.isHidden = true
-        bottomToolbar.isHidden = true
+        prepareBars(isHiddden: true)
 
         // Render view to an image
         UIGraphicsBeginImageContext(self.view.frame.size)
@@ -90,10 +89,14 @@ final class MemeCreateViewController: UIViewController,UIImagePickerControllerDe
         let memedImage:UIImage = UIGraphicsGetImageFromCurrentImageContext()!
         UIGraphicsEndImageContext()
 
-        topToolbar.isHidden = false
-        bottomToolbar.isHidden = false
+        prepareBars(isHiddden: false)
 
         return memedImage
+    }
+
+    private func prepareBars(isHiddden: Bool) {
+        topToolbar.isHidden = isHiddden
+        bottomToolbar.isHidden = isHiddden
     }
 
     private func save() {
