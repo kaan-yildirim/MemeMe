@@ -16,7 +16,6 @@ final class MemeCreateViewController: UIViewController,UIImagePickerControllerDe
     @IBOutlet weak private var topToolbar: UIToolbar!
     @IBOutlet weak private var bottomToolbar: UIToolbar!
     private var keyboardAlreadyShow = false
-    private var memeList: [Meme] = []
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -100,7 +99,8 @@ final class MemeCreateViewController: UIViewController,UIImagePickerControllerDe
 
     private func save() {
         let meme = Meme(top: topTextField.text, bottom: topTextField.text, originalImage: photoImageView.image, memeImage: generateMemedImage())
-        memeList.append(meme)
+        let appDelegate = UIApplication.shared.delegate as! AppDelegate
+        appDelegate.memeList.append(meme)
     }
 
     // MARK: Actions
