@@ -29,10 +29,6 @@ final class MemeCreateViewController: UIViewController,UIImagePickerControllerDe
         subscribeToKeyboardNotifications()
     }
 
-    override func viewWillDisappear(_ animated: Bool) {
-        super.viewWillDisappear(animated)
-    }
-
     private func prepareTextFields() {
         let memeTextAttributes: [NSAttributedString.Key: Any] = [
             .strokeColor: UIColor.black,
@@ -40,12 +36,15 @@ final class MemeCreateViewController: UIViewController,UIImagePickerControllerDe
             .font: UIFont(name: "HelveticaNeue-CondensedBlack", size: 40)!,
             .strokeWidth: -2.0
         ]
-        topTextField.defaultTextAttributes = memeTextAttributes
-        bottomTextField.defaultTextAttributes = memeTextAttributes
-        topTextField.textAlignment = .center
-        bottomTextField.textAlignment = .center
-        topTextField.delegate = self
-        bottomTextField.delegate = self
+        setupTextField(textField: topTextField, text: "TOP", attributes: memeTextAttributes)
+        setupTextField(textField: bottomTextField, text: "BOTTOM", attributes: memeTextAttributes)
+    }
+
+    private func setupTextField(textField: UITextField, text: String, attributes: [NSAttributedString.Key: Any]) {
+        textField.defaultTextAttributes = attributes
+        textField.text = text
+        textField.textAlignment = .center
+        textField.delegate = self
     }
 
     private func subscribeToKeyboardNotifications() {
@@ -84,8 +83,8 @@ final class MemeCreateViewController: UIViewController,UIImagePickerControllerDe
         prepareBars(isHiddden: true)
 
         // Render view to an image
-        UIGraphicsBeginImageContext(self.view.frame.size)
-        view.drawHierarchy(in: self.view.frame, afterScreenUpdates: true)
+        UIGraphicsBeginImageContext(view.frame.size)
+        view.drawHierarchy(in: view.frame, afterScreenUpdates: true)
         let memedImage:UIImage = UIGraphicsGetImageFromCurrentImageContext()!
         UIGraphicsEndImageContext()
 
@@ -106,15 +105,17 @@ final class MemeCreateViewController: UIViewController,UIImagePickerControllerDe
 
     // MARK: Actions
     @IBAction private func pickButtonPressed(_ sender: Any) {
-        let pickerController = UIImagePickerController()
-        pickerController.delegate = self
-        present(pickerController, animated: true, completion: nil)
+        pickImage(source: .photoLibrary)
     }
 
     @IBAction private func cameraButtonPressed(_ sender: Any) {
+        pickImage(source: .camera)
+    }
+
+    private func pickImage(source: UIImagePickerController.SourceType) {
         let pickerController = UIImagePickerController()
         pickerController.delegate = self
-        pickerController.sourceType = .camera
+        pickerController.sourceType = source
         present(pickerController, animated: true, completion: nil)
     }
 
