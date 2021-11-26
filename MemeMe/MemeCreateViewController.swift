@@ -58,12 +58,14 @@ final class MemeCreateViewController: UIViewController,UIImagePickerControllerDe
         view.frame.origin.y = 0
     }
 
+    // Calculates keyboard height
     private func getKeyboardHeight(_ notification: Notification) -> CGFloat {
         let userInfo = notification.userInfo
         guard let keyboardSize = userInfo?[UIResponder.keyboardFrameEndUserInfoKey] as? NSValue else { return 0 }
         return keyboardSize.cgRectValue.height
     }
 
+    // Generates meme image
     private func generateMemedImage() -> UIImage {
 
         // Render view to an image
@@ -75,6 +77,7 @@ final class MemeCreateViewController: UIViewController,UIImagePickerControllerDe
         return memedImage
     }
 
+    // MARK: Actions
     @IBAction private func pickButtonPressed(_ sender: Any) {
         let pickerController = UIImagePickerController()
         pickerController.delegate = self
@@ -93,7 +96,8 @@ final class MemeCreateViewController: UIViewController,UIImagePickerControllerDe
         let activityVC = UIActivityViewController(activityItems: [shareImage], applicationActivities: nil)
         present(activityVC, animated: true, completion: nil)
     }
-    
+
+    // MARK: ImagePicker Delegate
     func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey : Any]) {
         if let image = info[.originalImage] as? UIImage {
             photoImageView.image = image
@@ -105,6 +109,7 @@ final class MemeCreateViewController: UIViewController,UIImagePickerControllerDe
         picker.dismiss(animated: true)
     }
 
+    // MARK: TextField Delegate
     func textFieldShouldReturn(_ textField: UITextField) -> Bool {
         textField.resignFirstResponder()
         return true
