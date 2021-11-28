@@ -7,9 +7,9 @@
 
 import UIKit
 
-class MemeTableViewController: UITableViewController {
+final class MemeTableViewController: UITableViewController {
 
-    var memes: [Meme]! {
+    private var memes: [Meme]! {
         let object = UIApplication.shared.delegate
         let appDelegate = object as! AppDelegate
         return appDelegate.memeList

@@ -103,6 +103,13 @@ final class MemeCreateViewController: UIViewController,UIImagePickerControllerDe
         appDelegate.memeList.append(meme)
     }
 
+    private func pickImage(source: UIImagePickerController.SourceType) {
+        let pickerController = UIImagePickerController()
+        pickerController.delegate = self
+        pickerController.sourceType = source
+        present(pickerController, animated: true, completion: nil)
+    }
+
     // MARK: Actions
     @IBAction private func pickButtonPressed(_ sender: Any) {
         pickImage(source: .photoLibrary)
@@ -112,11 +119,8 @@ final class MemeCreateViewController: UIViewController,UIImagePickerControllerDe
         pickImage(source: .camera)
     }
 
-    private func pickImage(source: UIImagePickerController.SourceType) {
-        let pickerController = UIImagePickerController()
-        pickerController.delegate = self
-        pickerController.sourceType = source
-        present(pickerController, animated: true, completion: nil)
+    @IBAction private func cancelButtonPressed(_ sender: Any) {
+        navigationController?.popViewController(animated: true)
     }
 
     @IBAction private func shareButtonPressed(_ sender: Any) {

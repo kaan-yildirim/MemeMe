@@ -7,10 +7,10 @@
 
 import UIKit
 
-class MemeCollectionViewController: UICollectionViewController {
+final class MemeCollectionViewController: UICollectionViewController {
 
-    @IBOutlet weak var flowLayout: UICollectionViewFlowLayout!
-    var memes: [Meme]! {
+    @IBOutlet private weak var flowLayout: UICollectionViewFlowLayout!
+    private var memes: [Meme]! {
         let object = UIApplication.shared.delegate
         let appDelegate = object as! AppDelegate
         return appDelegate.memeList

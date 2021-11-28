@@ -7,9 +7,9 @@
 
 import UIKit
 
-class MemeDetailViewController: UIViewController {
+final class MemeDetailViewController: UIViewController {
 
-    @IBOutlet weak var memeImageView: UIImageView!
+    @IBOutlet private weak var memeImageView: UIImageView!
     var meme: Meme?
 
     override func viewDidLoad() {

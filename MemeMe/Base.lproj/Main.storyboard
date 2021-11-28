@@ -238,7 +238,13 @@
                             <constraint firstItem="6Tk-OE-BBY" firstAttribute="trailing" secondItem="bed-mO-GA2" secondAttribute="trailing" constant="8" id="ybK-HE-a8t"/>
                         </constraints>
                     </view>
-                    <navigationItem key="navigationItem" id="kNu-Ji-ZWo"/>
+                    <navigationItem key="navigationItem" id="kNu-Ji-ZWo">
+                        <barButtonItem key="rightBarButtonItem" title="Cancel" id="yUe-jE-9xi">
+                            <connections>
+                                <action selector="cancelButtonPressed:" destination="BYZ-38-t0r" id="IfU-N4-btS"/>
+                            </connections>
+                        </barButtonItem>
+                    </navigationItem>
                     <connections>
                         <outlet property="bottomTextField" destination="bed-mO-GA2" id="cP2-lR-jY7"/>
                         <outlet property="bottomToolbar" destination="hZu-y7-nwq" id="d5J-92-x0U"/>
