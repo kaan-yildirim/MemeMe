@@ -31,4 +31,10 @@ class MemeTableViewController: UITableViewController {
         cell?.textLabel?.text = model.top + "..." + model.bottom
         return cell!
     }
+
+    override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        let detailVC = UIStoryboard(name: "Main", bundle: nil).instantiateViewController(identifier: "MemeDetailViewController") as! MemeDetailViewController
+        detailVC.meme = memes[indexPath.row]
+        navigationController?.pushViewController(detailVC, animated: true)
+    }
 }
